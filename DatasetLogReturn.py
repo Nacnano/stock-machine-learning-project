@@ -1,6 +1,8 @@
 import torch
 from torch.utils.data import Dataset
 
+from tqdm.notebook import tqdm
+
 import pandas as pd
 import numpy as np
 import bisect as bs
@@ -59,12 +61,13 @@ class StockDatasetLogReturn(Dataset) :
     # output_size : size of list of output part
     def __init__(self, root_dirs, input_size = 1, output_size = 1) :
         self.root_dirs = root_dirs
+        self.is_preprocessed = False
         self.dataframes = []
         self.stat_prop = []
         self.input_size = input_size
         self.output_size = output_size
         self.start_idx = [0]
-        for filepath in root_dirs :
+        for filepath in tqdm(root_dirs) :
             self.dataframes.append(pd.read_csv(f"{filepath}"))
             # incase we have dataframe shorter than {input_size + output_size} 
             if(self.start_idx[-1] + len(self.dataframes[-1]) - input_size - output_size - 1 < 0) :
@@ -72,6 +75,16 @@ class StockDatasetLogReturn(Dataset) :
                 continue
             self.start_idx.append(self.start_idx[-1] + len(self.dataframes[-1]) - input_size - output_size - 1)
             self.stat_prop.append(GetStatProperty(self.dataframes[-1].loc()[:,["Volume"]].to_numpy()))
+
+    # Preprocess all data into pre_input, pre_output
+    def Preprocess(self) :
+        self.pre_input = []
+        self.pre_output = []
+        for i in tqdm(range(self.__len__())) :
+            input,output = self.__getitem__(i)
+            self.pre_input.append(input)
+            self.pre_output.append(output)
+        self.is_preprocessed = True
 
     def __len__(self) :
         return self.start_idx[-1]
@@ -87,6 +100,8 @@ class StockDatasetLogReturn(Dataset) :
     # output is tensor of shape(6,output_size) where
     # just like input but output
     def __getitem__(self, idx) :
+        if(self.is_preprocessed) :
+            return self.pre_input[idx],self.pre_output[idx]
         dataframe_idx = bs.bisect_right(self.start_idx,idx) - 1
         input_start_entry = idx - self.start_idx[dataframe_idx] + 1
         output_start_entry = input_start_entry + self.input_size
@@ -123,3 +138,4 @@ class StockDatasetLogReturn(Dataset) :
             return self.__getitem__(rd.randrange(0,self.__len__() - 1))
 
         return torch.from_numpy(np.vstack((input_date,input_open,input_high,input_low,input_close,input_volume))), torch.from_numpy(np.vstack((output_date,output_open,output_high,output_low,output_close,output_volume)))
+
