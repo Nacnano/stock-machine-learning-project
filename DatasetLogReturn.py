@@ -6,6 +6,8 @@ import numpy as np
 import bisect as bs
 from datetime import date
 
+# date scaler : scale day count
+date_scaler = 30000
 
 # return number of day count fomr 1 Jan 1962
 # d : date string of form yyyy-mm-dd
@@ -60,7 +62,7 @@ class StockDatasetLogReturn(Dataset) :
             self.stat_prop.append(GetStatProperty(self.dataframes[-1].loc()[:,["Volume"]].to_numpy()))
 
     def __len__(self) :
-        return self.start_ind[-1]
+        return self.start_idx[-1]
         
     # return tuple of tensors (input,output)
     # input is tensor of shape (6,input_size) where
@@ -79,7 +81,7 @@ class StockDatasetLogReturn(Dataset) :
 
 
         input_date = self.dataframes[dataframe_idx].loc[input_start_entry:input_start_entry + self.input_size - 1,["Date"]].values.reshape(-1).tolist()
-        input_date = np.array(list(map(DateConverter,input_date))).astype('float64')
+        input_date = np.array(list(map(DateConverter,input_date))).astype('float64') / date_scaler
         input_open = self.dataframes[dataframe_idx].loc[input_start_entry - 1:input_start_entry + self.input_size - 1,["Open"]].to_numpy().reshape(-1).astype('float64')
         input_open = LogReturn(input_open)
         input_high = self.dataframes[dataframe_idx].loc[input_start_entry - 1:input_start_entry + self.input_size - 1,["High"]].to_numpy().reshape(-1).astype('float64')
@@ -92,7 +94,7 @@ class StockDatasetLogReturn(Dataset) :
         input_volume = Normalize(input_volume,self.stat_prop[dataframe_idx])
 
         output_date = self.dataframes[dataframe_idx].loc[output_start_entry:output_start_entry + self.output_size - 1,["Date"]].values.reshape(-1).tolist()
-        output_date = np.array(list(map(DateConverter,output_date))).astype('float64')
+        output_date = np.array(list(map(DateConverter,output_date))).astype('float64') / date_scaler
         output_open = self.dataframes[dataframe_idx].loc[output_start_entry - 1:output_start_entry + self.output_size - 1,["Open"]].to_numpy().reshape(-1).astype('float64')
         output_open = LogReturn(output_open)
         output_high = self.dataframes[dataframe_idx].loc[output_start_entry - 1:output_start_entry + self.output_size - 1,["High"]].to_numpy().reshape(-1).astype('float64')
