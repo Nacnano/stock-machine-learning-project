@@ -35,7 +35,14 @@ def Normalize(a, stat_property) :
 # retrun log-return of a[1:]
 # a : numpy array
 def LogReturn(a) :
+    eps = 1e-10
+
+    # fix divided by zero
+    _divisor_zero = a[:-1] < eps
+    a[:-1] = a[:1] + _divisor_zero * a[1:]
+
     b = a[1:] / a[:-1]
+     
     return np.log(b)
 
 
