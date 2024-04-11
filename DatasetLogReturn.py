@@ -94,29 +94,29 @@ class StockDatasetLogReturn(Dataset) :
         # in case divided by zero
         try :
             input_date = self.dataframes[dataframe_idx].loc[input_start_entry:input_start_entry + self.input_size - 1,["Date"]].values.reshape(-1).tolist()
-            input_date = np.array(list(map(DateConverter,input_date))).astype('float64') / date_scaler
-            input_open = self.dataframes[dataframe_idx].loc[input_start_entry - 1:input_start_entry + self.input_size - 1,["Open"]].to_numpy().reshape(-1).astype('float64')
+            input_date = np.array(list(map(DateConverter,input_date))).astype('float32') / date_scaler
+            input_open = self.dataframes[dataframe_idx].loc[input_start_entry - 1:input_start_entry + self.input_size - 1,["Open"]].to_numpy().reshape(-1).astype('float32')
             input_open = LogReturn(input_open)
-            input_high = self.dataframes[dataframe_idx].loc[input_start_entry - 1:input_start_entry + self.input_size - 1,["High"]].to_numpy().reshape(-1).astype('float64')
+            input_high = self.dataframes[dataframe_idx].loc[input_start_entry - 1:input_start_entry + self.input_size - 1,["High"]].to_numpy().reshape(-1).astype('float32')
             input_high = LogReturn(input_high)
-            input_low = self.dataframes[dataframe_idx].loc[input_start_entry - 1:input_start_entry + self.input_size - 1,["Low"]].to_numpy().reshape(-1).astype('float64')
+            input_low = self.dataframes[dataframe_idx].loc[input_start_entry - 1:input_start_entry + self.input_size - 1,["Low"]].to_numpy().reshape(-1).astype('float32')
             input_low = LogReturn(input_low)
-            input_close = self.dataframes[dataframe_idx].loc[input_start_entry - 1:input_start_entry + self.input_size - 1,["Close"]].to_numpy().reshape(-1).astype('float64')
+            input_close = self.dataframes[dataframe_idx].loc[input_start_entry - 1:input_start_entry + self.input_size - 1,["Close"]].to_numpy().reshape(-1).astype('float32')
             input_close = LogReturn(input_close)
-            input_volume = self.dataframes[dataframe_idx].loc[input_start_entry:input_start_entry + self.input_size - 1,["Volume"]].to_numpy().reshape(-1).astype('float64')
+            input_volume = self.dataframes[dataframe_idx].loc[input_start_entry:input_start_entry + self.input_size - 1,["Volume"]].to_numpy().reshape(-1).astype('float32')
             input_volume = Normalize(input_volume,self.stat_prop[dataframe_idx])
 
             output_date = self.dataframes[dataframe_idx].loc[output_start_entry:output_start_entry + self.output_size - 1,["Date"]].values.reshape(-1).tolist()
-            output_date = np.array(list(map(DateConverter,output_date))).astype('float64') / date_scaler
-            output_open = self.dataframes[dataframe_idx].loc[output_start_entry - 1:output_start_entry + self.output_size - 1,["Open"]].to_numpy().reshape(-1).astype('float64')
+            output_date = np.array(list(map(DateConverter,output_date))).astype('float32') / date_scaler
+            output_open = self.dataframes[dataframe_idx].loc[output_start_entry - 1:output_start_entry + self.output_size - 1,["Open"]].to_numpy().reshape(-1).astype('float32')
             output_open = LogReturn(output_open)
-            output_high = self.dataframes[dataframe_idx].loc[output_start_entry - 1:output_start_entry + self.output_size - 1,["High"]].to_numpy().reshape(-1).astype('float64')
+            output_high = self.dataframes[dataframe_idx].loc[output_start_entry - 1:output_start_entry + self.output_size - 1,["High"]].to_numpy().reshape(-1).astype('float32')
             output_high = LogReturn(output_high)
-            output_low = self.dataframes[dataframe_idx].loc[output_start_entry - 1:output_start_entry + self.output_size - 1,["Low"]].to_numpy().reshape(-1).astype('float64')
+            output_low = self.dataframes[dataframe_idx].loc[output_start_entry - 1:output_start_entry + self.output_size - 1,["Low"]].to_numpy().reshape(-1).astype('float32')
             output_low = LogReturn(output_low)
-            output_close = self.dataframes[dataframe_idx].loc[output_start_entry - 1:output_start_entry + self.output_size - 1,["Close"]].to_numpy().reshape(-1).astype('float64')
+            output_close = self.dataframes[dataframe_idx].loc[output_start_entry - 1:output_start_entry + self.output_size - 1,["Close"]].to_numpy().reshape(-1).astype('float32')
             output_close = LogReturn(output_close)
-            output_volume = self.dataframes[dataframe_idx].loc[output_start_entry:output_start_entry + self.output_size - 1,["Volume"]].to_numpy().reshape(-1).astype('float64')
+            output_volume = self.dataframes[dataframe_idx].loc[output_start_entry:output_start_entry + self.output_size - 1,["Volume"]].to_numpy().reshape(-1).astype('float32')
             output_volume = Normalize(output_volume,self.stat_prop[dataframe_idx])
         except :
             # return new getiten as randon idx
