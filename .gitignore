@@ -162,3 +162,4 @@ cython_debug/
 
 #raw data
 /data/*
+.DS_Store
