@@ -1,1 +1,0 @@
-# stock-machine-learning-project
