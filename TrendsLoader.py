@@ -1,27 +1,18 @@
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-import time
+from pytrends.request import TrendReq
+import os
 
-# TODO: Find a way to login using google account (need two factor auth) 
-def download_google_trends_data(search_terms):
-    driver = webdriver.Chrome()
+def download_google_trends_data(search_terms, root_dir="./data/trends"):
+    if not os.path.exists(root_dir):
+        os.makedirs(root_dir)
+
+    pytrends = TrendReq(hl='en-US', tz=360)
     
-    try:
-        for term in search_terms:
-            driver.get(f'https://trends.google.com/trends/explore?date=all&q={term}')
-            
-            download_button = WebDriverWait(driver, 10).until(
-                EC.presence_of_element_located((By.XPATH, '/html/body/div[3]/div[2]/div/md-content/div/div/div[1]/trends-widget/ng-include/widget/div/div/div/widget-actions/div/button[1]'))
-            )
-            
-            download_button.click()
-            print(f"CSV data for '{term}' downloaded successfully.")
-            
-            time.sleep(1) 
-    finally:
-        driver.quit()
+    for term in search_terms:
+        pytrends.build_payload(kw_list=[term], timeframe='all')
+        data = pytrends.interest_over_time()
+        data.to_csv(f"{root_dir}/{term}.csv")
+        print(f"CSV data for '{term}' downloaded successfully.")
 
-search_terms = ["iphone", "ios", "andriod"]
+
+search_terms = ["ios", "andriod", "iphone"]
 download_google_trends_data(search_terms)
