@@ -161,6 +161,7 @@ cython_debug/
 
 # Raw data
 /data/*
+/data2/*
 
 # model(too large)
 /models/*
