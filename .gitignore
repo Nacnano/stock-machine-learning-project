@@ -163,7 +163,7 @@ cython_debug/
 /data/*
 
 # model(too large)
-./models/*
+/models/*
 
 # For MacOS
 .DS_Store
