@@ -15,12 +15,17 @@ for row in table.findAll("tr")[1:]:
     tickers.append(ticker)
 
 tickers = [s.replace("\n", "") for s in tickers]
-tickers.remove("CEG")
-tickers.remove("BRK.B")
-tickers.remove("BF.B")
-tickers.sort()
-tickers.append("SPX")
 
+tickers.sort()
+tickers.append('^GSPC')
+
+
+tickers_file_path = "tickers_sp500.txt"
+with open(tickers_file_path, "w") as f:
+    for ticker in tickers:
+        f.write(ticker + "\n")
+
+# Save to local
 for ticker in tickers:
     data = yf.download(ticker)
     data.to_csv(f"data/{ticker}.csv")
