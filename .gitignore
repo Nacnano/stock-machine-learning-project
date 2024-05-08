@@ -160,9 +160,10 @@ cython_debug/
 #.idea/
 
 # Raw data
+data
 /data/*
-/models/*
 /data2/*
+/models/*
 
 # For MacOS
 .DS_Store
