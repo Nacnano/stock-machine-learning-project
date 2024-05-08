@@ -161,5 +161,7 @@ cython_debug/
 
 
 #raw data
+/data2/*
+/models/*
 /data/*
 .DS_Store
