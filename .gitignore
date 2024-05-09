@@ -166,5 +166,8 @@ cython_debug/
 # model(too large)
 /models/*
 
+# test output
+/out/*
+
 # For MacOS
 .DS_Store
