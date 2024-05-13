@@ -83,4 +83,30 @@ class StockLSTM1(nn.Module) :
         output = self.layer3(h2[:,-1,:])
         output = torch.multiply(output,0.04)
         return output
+
+# Get output function
+def LSTM1_stock_predict(model, ticker, input_dataframe, output_dataframe) :
+    model.eval()
+
+    X_dataframe = input_dataframe.loc[ticker]
+    y_dataframe = output_dataframe.loc[ticker]
+
+    dataset = LSTMdataset1(X_dataframe, y_dataframe, 8)
+    dataset.Preprocess()
+    dataloader = torch.utils.data.DataLoader(dataset, batch_size = 32, shuffle=False)
+
+    # input size = 8, the prediction is discard
+    predict_res = y_dataframe.iloc[0:7].values.tolist()
+    target_res = y_dataframe.iloc[0:7].values.tolist()
     
+    for batch_X, batch_y in dataloader:
+        batch_X = torch.transpose(batch_X[:,:,:],1,2).to(device)
+        batch_y = batch_y[:,None].to(device)
+        
+        y_pred = model(batch_X)
+
+        predict_res += y_pred.to(torch.device("cpu")).reshape(-1).tolist()
+        target_res += batch_y.to(torch.device("cpu")).reshape(-1).tolist()
+
+    return np.array(predict_res),np.array(target_res)
+
