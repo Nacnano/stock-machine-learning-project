@@ -20,7 +20,7 @@ See the slide [Here](https://github.com/Nacnano/stock-machine-learning-project/b
 - Data Splitting
   - Training and Testing Set: 2014 - 2023 (9y)
   - Trading Evaluation: 2023 - 2024 (1y)
-- Modelling
+- Model
   - Baseline: Naive Forecast
   - Neural Network: Architecture 1 (Timeseries) & 2 (TS+Exogenous)
     - Long Short Term Memory (LSTM)
