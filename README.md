@@ -22,7 +22,7 @@ See the slide [Here](https://github.com/Nacnano/stock-machine-learning-project/b
   - Trading Evaluation: 2023 - 2024 (1y)
 - Modelling
   - Baseline: Naive Forecast
-  - Neural Network: architech 1 (Timeseries) & 2 (TS+Exogenous)
+  - Neural Network: Architecture 1 (Timeseries) & 2 (TS+Exogenous)
     - Long Short Term Memory (LSTM)
     - Gated Recurrent Unit (GRU)
   - Classical: Regression & Classification
